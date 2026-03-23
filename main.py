@@ -5,10 +5,14 @@ from json import loads
 from random import randrange, choice, random
 from asyncio import sleep
 
+
+CHARS = "abcdefghijklmnopqrstuvwxyz"
+
 def process_formatting(text:str, message:discord.Message):
     return text.replace("%USER%", message.author.name)
 
 def main():
+    global DATA
     if len(argv) < 2:
         print("Invalid arguments, expected filename")
         exit(1)
@@ -23,7 +27,6 @@ def main():
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
     tree = discord.app_commands.CommandTree(client=client)
-    chars = "abcdefghijklmnopqrstuvwxyz"
     authorizedIDs = [] # Add your discord ID in here to be able to sync the bot's tree commands.
 
     @client.event
@@ -33,6 +36,7 @@ def main():
 
     @client.event
     async def on_message(message: discord.Message):
+        global DATA
         if message.author.id in authorizedIDs:
             if message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you sync please? Thank you!":
                     await tree.sync()
@@ -67,7 +71,7 @@ def main():
                         case "random":
                             spam = ""
                             for i in range(0, randrange(response[1],response[2])):
-                                spam += choice(chars)
+                                spam += choice(CHARS)
                             if random() > 0.5:
                                 spam = spam.upper()
                             await message.reply(spam)
