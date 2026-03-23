@@ -12,7 +12,7 @@ def main():
     if len(argv) < 2:
         print("Invalid arguments, expected filename")
         exit(1)
-    FILENAME = argv[1]
+    FILENAME = f"config/{argv[1]}"
 
     if not exists(FILENAME):
         raise FileNotFoundError(f"File \"{FILENAME}\" does not exist")
@@ -33,10 +33,15 @@ def main():
 
     @client.event
     async def on_message(message: discord.Message):
-        if message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you sync please? Thank you!":
-            if message.author.id in authorizedIDs:
-                await tree.sync()
-                await message.add_reaction("✅")
+        if message.author.id in authorizedIDs:
+            if message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you sync please? Thank you!":
+                    await tree.sync()
+                    await message.add_reaction("✅")
+            elif message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you reload your config please? Thank you!":
+                    with open(FILENAME, 'r') as file:
+                        DATA = loads(file.read())
+                    await message.add_reaction("✅")
+        
         else:
             if not message.author.bot:
                 stimmed = False
