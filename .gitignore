@@ -1,0 +1,5 @@
+*.json
+env3/
+!template.json
+*.py[cod]
+__pycache__/
