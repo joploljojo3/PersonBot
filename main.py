@@ -37,41 +37,42 @@ def main():
             if message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you sync please? Thank you!":
                     await tree.sync()
                     await message.add_reaction("✅")
+                    return
             elif message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you reload your config please? Thank you!":
                     with open(FILENAME, 'r') as file:
                         DATA = loads(file.read())
                     await message.add_reaction("✅")
+                    return
         
-        else:
-            if not message.author.bot:
-                stimmed = False
-                for stim, response in DATA["Stims"].items():
-                    if stim.lower() in message.content.lower():
-                        stimmed = True
-                        await message.reply(process_formatting(
-                            text=choice(response),
-                            message=message
-                        ))
-                if stimmed:
-                    return None
-                if (randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions) or (DATA["Name"].lower() in message.content.lower()):
-                    response = choice(DATA["Randoms"])
-                    if isinstance(response, str):
-                        await message.reply(response)
-                        if randrange(1,DATA["AddChance"]) == 1:
-                            await sleep((random()+1)*2)
-                            await message.channel.send(choice(DATA["Additives"]))
-                    else:
-                        match response[0]:
-                            case "random":
-                                spam = ""
-                                for i in range(0, randrange(response[1],response[2])):
-                                    spam += choice(chars)
-                                if random() > 0.5:
-                                    spam = spam.upper()
-                                await message.reply(spam)
-                            case "repeat":
-                                await message.reply(response[1] * randrange(response[2], response[3]))
+        if not message.author.bot:
+            stimmed = False
+            for stim, response in DATA["Stims"].items():
+                if stim.lower() in message.content.lower():
+                    stimmed = True
+                    await message.reply(process_formatting(
+                        text=choice(response),
+                        message=message
+                    ))
+            if stimmed:
+                return None
+            if (randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions) or (DATA["Name"].lower() in message.content.lower()):
+                response = choice(DATA["Randoms"])
+                if isinstance(response, str):
+                    await message.reply(response)
+                    if randrange(1,DATA["AddChance"]) == 1:
+                        await sleep((random()+1)*2)
+                        await message.channel.send(choice(DATA["Additives"]))
+                else:
+                    match response[0]:
+                        case "random":
+                            spam = ""
+                            for i in range(0, randrange(response[1],response[2])):
+                                spam += choice(chars)
+                            if random() > 0.5:
+                                spam = spam.upper()
+                            await message.reply(spam)
+                        case "repeat":
+                            await message.reply(response[1] * randrange(response[2], response[3]))
 
 
     client.run(DATA["Token"])
