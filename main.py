@@ -27,7 +27,7 @@ def main():
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
     tree = discord.app_commands.CommandTree(client=client)
-    authorizedIDs = [] # Add your discord ID in here to be able to sync the bot's tree commands.
+    authorizedIDs = DATA["Owners"]
 
     @client.event
     async def on_ready():
@@ -48,7 +48,7 @@ def main():
                     await message.add_reaction("✅")
                     return
         
-        if not message.author.bot:
+        if (not message.author.bot) or (message.author.id in DATA["WhitelistedBots"]):
             stimmed = False
             for stim, response in DATA["Stims"].items():
                 if stim.lower() in message.content.lower():

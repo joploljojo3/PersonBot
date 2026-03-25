@@ -2,6 +2,8 @@
     "Name": "name that the bot listens to.",
     "Nickname": "name that the bot uses",
     "Token": "raw token. WARNING, NOT SECURE!!!",
+    "Owners": ["List of owner IDs, can reload config and sync tree commands."],
+    "WhitelistedBots": ["List of bot IDs that the bot SHOULD respond to."],
     "RandomChance": "Chance to respond randomly is 1 in n, where n is this setting. (remove this string AND the quotes)",
     "AddChance": "Chance to add something after responding is 1 in n, where n is this setting. (remove this string AND the quotes)",
     "Randoms": [
