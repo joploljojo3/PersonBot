@@ -1,0 +1,10 @@
+services:
+  bot:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CONFIG: template.json
+    volumes:
+      - ./config:/app/config

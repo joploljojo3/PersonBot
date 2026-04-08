@@ -6,6 +6,7 @@ WARNING! Token is stored in plain text, make sure you know what you're doing bef
 ## Table of Contents
 * [Features](#features)
 * [Dockerfile](#dockerfile)
+* [Docker compose](#docker-compose)
 * <details>
     <summary><a href="#config">Config</a></summary>
 
@@ -38,6 +39,9 @@ WARNING! Token is stored in plain text, make sure you know what you're doing bef
 Build using `docker build . -t joploljojo3/personbot --build-arg CONFIG=[CONFIGFILE]` (default config file is "config.json")
 Run using `docker run -v ./config:/app/config joploljojo3/personbot`
 Docker container mounts /config, so config files can be updated on-the-fly
+
+## Docker compose
+A compose.yml file is included, and can be used by just changing what config file is used. You can add more versions by duplicating everything under and including the "bot:" section.
 
 ## Config
 The config file is used to configure the bot to your liking.
