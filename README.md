@@ -18,6 +18,7 @@ WARNING! Token is stored in plain text, make sure you know what you're doing bef
     + [WhitelistedBots](#whitelistedbots)
     + [RandomChance](#randomchance)
     + [AddChance](#addchance)
+    + [NameChance](#namechance)
     + [Randoms](#randoms)
     + [Additives](#additives)
     + [Stims](#stims)
@@ -55,6 +56,7 @@ The config file is used to configure the bot to your liking.
     "WhitelistedBots": [],
     "RandomChance": 0,
     "AddChance": 0,
+    "NameChance": 0,
     "Randoms": [
         ""
     ],
@@ -62,7 +64,7 @@ The config file is used to configure the bot to your liking.
         ""
     ],
     "Stims": {
-        "": [""]
+        "": [0, ""]
     }
 }
 ```
