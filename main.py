@@ -65,11 +65,11 @@ def main():
             for stim, response in DATA["Stims"].items():
                 if stim.lower() in message_lower:
                     stimmed = True
-                    response = choice(response)
-                    if not isinstance(response, str):
-                        response = process_function(response=response, message=message)
+                    chosen_response = choice(response)
+                    if not isinstance(chosen_response, str):
+                        response = process_function(response=chosen_response, message=message)
                     await message.reply(process_formatting(
-                        text=choice(response),
+                        text=chosen_response,
                         message=message
                     ))
             if stimmed:
