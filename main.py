@@ -9,7 +9,7 @@ from asyncio import sleep
 CHARS = "abcdefghijklmnopqrstuvwxyz"
 
 def process_formatting(text:str, message:discord.Message):
-    return text.replace("%USER%", message.author.name)
+    return text.replace("%USER%", message.author.display_name)
 
 def main():
     global DATA
@@ -38,11 +38,7 @@ def main():
     async def on_message(message: discord.Message):
         global DATA
         if message.author.id in authorizedIDs:
-            if message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you sync please? Thank you!":
-                    await tree.sync()
-                    await message.add_reaction("✅")
-                    return
-            elif message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you reload your config please? Thank you!":
+            if message.content == f"Hey {message.guild.get_member(client.user.id).nick}, could you reload your config please? Thank you!":
                     with open(FILENAME, 'r') as file:
                         DATA = loads(file.read())
                     await message.add_reaction("✅")
