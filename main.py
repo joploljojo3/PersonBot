@@ -11,6 +11,19 @@ CHARS = "abcdefghijklmnopqrstuvwxyz"
 def process_formatting(text:str, message:discord.Message):
     return text.replace("%USER%", message.author.display_name)
 
+def process_function(response, message:discord.Message):
+    match response[0]:
+        case "random":
+            spam = ""
+            for i in range(0, randrange(response[1],response[2])):
+                spam += choice(CHARS)
+            if random() > 0.5:
+                spam = spam.upper()
+            return spam
+        case "repeat":
+            return response[1] * randrange(response[2], response[3])
+    return ""
+
 def main():
     global DATA
     if len(argv) < 2:
@@ -23,6 +36,8 @@ def main():
     DATA = {}
     with open(FILENAME, 'r') as file:
         DATA = loads(file.read())
+    if DATA["Token"] == None:
+        return
 
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
@@ -46,34 +61,30 @@ def main():
         
         if (not message.author.bot) or (message.author.id in DATA["WhitelistedBots"]):
             stimmed = False
+            message_lower = message.content.lower()
             for stim, response in DATA["Stims"].items():
-                if stim.lower() in message.content.lower():
+                if stim.lower() in message_lower:
                     stimmed = True
+                    response = choice(response)
+                    if not isinstance(response, str):
+                        response = process_function(response=response, message=message)
                     await message.reply(process_formatting(
                         text=choice(response),
                         message=message
                     ))
             if stimmed:
                 return None
-            if (randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions) or (DATA["Name"].lower() in message.content.lower()):
+            if (randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions) or (DATA["Name"].lower() in message_lower):
                 response = choice(DATA["Randoms"])
-                if isinstance(response, str):
-                    await message.reply(response)
-                    if randrange(1,DATA["AddChance"]) == 1:
-                        await sleep((random()+1)*2)
-                        await message.channel.send(choice(DATA["Additives"]))
-                else:
-                    match response[0]:
-                        case "random":
-                            spam = ""
-                            for i in range(0, randrange(response[1],response[2])):
-                                spam += choice(CHARS)
-                            if random() > 0.5:
-                                spam = spam.upper()
-                            await message.reply(spam)
-                        case "repeat":
-                            await message.reply(response[1] * randrange(response[2], response[3]))
-
+                if not isinstance(response, str):
+                    response = process_function(response=response, message=message) 
+                await message.reply(process_formatting(text=response, message=message))
+                if randrange(1,DATA["AddChance"]) == 1:
+                    await sleep((random()+1)*2)
+                    additive = choice(DATA["Additives"])
+                    if not isinstance(response, str):
+                        additive = process_function(response=response, message=message)
+                    await message.channel.send(process_formatting(text=additive, message=message))
 
     client.run(DATA["Token"])
 
