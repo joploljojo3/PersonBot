@@ -8,6 +8,9 @@ from asyncio import sleep
 
 CHARS = "abcdefghijklmnopqrstuvwxyz"
 
+def randomrange(start:int, stop:int, step:int = 1):
+    return randrange(start, stop+1, step)
+
 def process_formatting(text:str, message:discord.Message):
     return text.replace("%USER%", message.author.display_name)
 
@@ -15,13 +18,13 @@ def process_function(response, message:discord.Message):
     match response[0]:
         case "random":
             spam = ""
-            for i in range(0, randrange(response[1],response[2])):
+            for i in range(0, randomrange(response[1],response[2])):
                 spam += choice(CHARS)
             if random() > 0.5:
                 spam = spam.upper()
             return spam
         case "repeat":
-            return response[1] * randrange(response[2], response[3])
+            return response[1] * randomrange(response[2], response[3])
     return ""
 
 def main():
@@ -64,9 +67,9 @@ def main():
             message_lower = message.content.lower()
             for stim, response in DATA["Stims"].items():
                 if stim.lower() in message_lower:
-                    if (randrange(1,response.pop(0)) == 1):
+                    if (randomrange(1,response[0]) == 1):
                         stimmed = True
-                        chosen_response = choice(response)
+                        chosen_response = choice(response[1:])
                         if not isinstance(chosen_response, str):
                             response = process_function(response=chosen_response, message=message)
                         await message.reply(process_formatting(
@@ -76,9 +79,9 @@ def main():
             
             randomReply = False
             if not stimmed:
-                if ((randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions)):
+                if ((randomrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions)):
                     randomReply = True
-                elif (DATA["Name"].lower() in message_lower) and (randrange(1,DATA["NameChance"]) == 1):
+                elif (DATA["Name"].lower() in message_lower) and (randomrange(1,DATA["NameChance"]) == 1):
                     randomReply = True
 
             if randomReply:
@@ -86,7 +89,7 @@ def main():
                 if not isinstance(response, str):
                     response = process_function(response=response, message=message) 
                 await message.reply(process_formatting(text=response, message=message))
-                if randrange(1,DATA["AddChance"]) == 1:
+                if randomrange(1,DATA["AddChance"]) == 1:
                     await sleep((random()+1)*2)
                     additive = choice(DATA["Additives"])
                     if not isinstance(response, str):
