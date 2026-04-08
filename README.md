@@ -68,7 +68,7 @@ The config file is used to configure the bot to your liking.
 ```
 
 ### Name
-This is used as the bot's name. If this is mentioned in a message, it will respond to it.
+This is used as the bot's name. If this is mentioned in a message, it will respond to it based on [NameChance](#namechance).
 
 ### Nickname
 This is the name that will be used as the bot'snickname in all guilds it's in. Also listens to thisfor reloading config.
@@ -88,6 +88,9 @@ The chance (1 in n) to respond to any message sent by a user. (bots are ignored)
 ### AddChance
 The chance (1 in n) to add an extra message onto a response after a delay.
 
+### NameChance
+The chance (1 in n) to respond to the bot's [name](#name)
+
 ### Randoms
 A list of random messages to choose from when responding to a message. (supports [formatting](#config-formatting) and [functions](#functions))
 
@@ -95,7 +98,7 @@ A list of random messages to choose from when responding to a message. (supports
 A list of random additive messages to choose from when adding onto a response. (supports [formatting](#config-formatting) and [functions](#functions))
 
 ### Stims
-A key-pair value of things to specifically respond to. When key is found, it chooses a random value from the list supplied, and responds with that. (cancels any further random interaction, also supports [formatting](#config-formatting) and [functions](#functions))
+A key-pair value of things to specifically respond to. When key is found, it chooses a random value from the list supplied, and responds with that. first value of the list must be a number, and specifies the odds of responding with that stim. (cancels any further random interaction, also supports [formatting](#config-formatting) and [functions](#functions))
 
 ## Config Formatting
 Any formatting-supported text can use tags to replace text.

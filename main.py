@@ -64,17 +64,24 @@ def main():
             message_lower = message.content.lower()
             for stim, response in DATA["Stims"].items():
                 if stim.lower() in message_lower:
-                    stimmed = True
-                    chosen_response = choice(response)
-                    if not isinstance(chosen_response, str):
-                        response = process_function(response=chosen_response, message=message)
-                    await message.reply(process_formatting(
-                        text=chosen_response,
-                        message=message
-                    ))
-            if stimmed:
-                return None
-            if (randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions) or (DATA["Name"].lower() in message_lower):
+                    if (randrange(1,response.pop(0)) == 1):
+                        stimmed = True
+                        chosen_response = choice(response)
+                        if not isinstance(chosen_response, str):
+                            response = process_function(response=chosen_response, message=message)
+                        await message.reply(process_formatting(
+                            text=chosen_response,
+                            message=message
+                        ))
+            
+            randomReply = False
+            if not stimmed:
+                if ((randrange(1,DATA["RandomChance"]) == 1) or (client.user in message.mentions)):
+                    randomReply = True
+                elif (DATA["Name"].lower() in message_lower) and (randrange(1,DATA["NameChance"]) == 1):
+                    randomReply = True
+
+            if randomReply:
                 response = choice(DATA["Randoms"])
                 if not isinstance(response, str):
                     response = process_function(response=response, message=message) 
